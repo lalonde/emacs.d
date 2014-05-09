@@ -205,7 +205,7 @@ Argument COMMAND is the command to use when compiling."
   (ede-jvm-get-classpath-from-command proj ede-maven2-execute-mvn-to-get-classpath
 				      maven2-outfile-name ede-maven2-maven-command
 				      `(,nil ,nil ,nil "--batch-mode" "dependency:build-classpath"
-					     ,(concat "-Dmdep.outputFile=" maven2-outfile-name))))
+					     ,(concat "-Dmdep.outputFile=" maven2-outfile-name), "-DexcludeTypes=pom")))
 
 ;; TODO: really should be based on content of pom.xml file. But we need parser for it...
 ;; TODO: add caching...
@@ -250,4 +250,3 @@ Argument COMMAND is the command to use when compiling."
 ;; End:
 
 ;;; ede/maven2.el ends here
-

@@ -22,14 +22,15 @@
 
 (add-to-list 'load-path my-emacs-vendor-dir)
 
-(load-conf "cedet-conf")
 (load-conf "package-conf")
 (load-conf "editor-conf")
+(load-conf "cedet-conf")
 (load-conf "visual-conf")
 (load-conf "yasnippet-conf")
 
 (load-conf "sqlplus-conf")
 (load-conf "tabbar-conf")
+(load-conf "keys-conf")
 
 (when (file-exists-p my-emacs-personal-dir)
   (message "Loading personal configuration files in %s..." my-emacs-personal-dir)

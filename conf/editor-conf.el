@@ -1,9 +1,12 @@
 (global-auto-revert-mode 1)
 
+(windmove-default-keybindings)
+
+(exec-path-from-shell-copy-env "GOPATH")
+(exec-path-from-shell-copy-env "JAVA_HOME")
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
-(windmove-default-keybindings)
 
 (require 'flyspell)
 (setq ispell-program-name "aspell" ; use aspell instead of ispell
@@ -31,8 +34,15 @@
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
+;; projectile is a project management mode
+(require 'projectile)
+(setq projectile-cache-file (expand-file-name  "projectile.cache" my-emacs-app-data-dir))
+(projectile-global-mode t)
+(diminish 'projectile-mode "Prjl")
+
 (frame-restore-mode)
 
-;; (desktop-save-mode t)
+;;(desktop-save-mode 1)
+
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;;(add-hook 'c-mode-hook (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))

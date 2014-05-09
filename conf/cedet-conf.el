@@ -27,3 +27,6 @@
 ;; Setup JAVA....
 (require 'cedet-java)
 (require 'semantic/db-javap)
+
+(when (eq (cedet-java-find-jdk-core-jar) nil)
+  (setq cedet-java-core-jar-name "jre/lib/rt.jar"))
