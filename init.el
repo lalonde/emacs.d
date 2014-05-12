@@ -22,9 +22,9 @@
 
 (add-to-list 'load-path my-emacs-vendor-dir)
 
+(load-conf "cedet-conf")
 (load-conf "package-conf")
 (load-conf "editor-conf")
-(load-conf "cedet-conf")
 (load-conf "visual-conf")
 (load-conf "yasnippet-conf")
 
