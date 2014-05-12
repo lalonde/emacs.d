@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#git clone http://git.randomsample.de/cedet.git
 cd cedet
 git pull --rebase
 make clean-all
