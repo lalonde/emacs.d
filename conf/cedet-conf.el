@@ -1,5 +1,5 @@
-(load (expand-file-name "cedet-bzr/cedet-devel-load" my-emacs-base-dir))
-(load (expand-file-name "cedet-bzr/contrib/cedet-contrib-load" my-emacs-base-dir))
+(load (expand-file-name "cedet/cedet-devel-load" my-emacs-base-dir))
+(load (expand-file-name "cedet/contrib/cedet-contrib-load" my-emacs-base-dir))
 
 (setq semanticdb-default-save-directory
       (expand-file-name "semanticdb" my-emacs-app-data-dir))
