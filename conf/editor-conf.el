@@ -7,6 +7,7 @@
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
+(put 'dired-find-alternate-file 'disabled nil)
 
 (require 'flyspell)
 (setq ispell-program-name "aspell" ; use aspell instead of ispell
@@ -22,6 +23,19 @@
       ido-auto-merge-work-directories-length -1)
 (ido-mode t)
 
+;; taken from prelude.  i like this order
+;; hippie expand is dabbrev expand on steroids
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev
+                                         try-expand-dabbrev-all-buffers
+                                         try-expand-dabbrev-from-kill
+                                         try-complete-file-name-partially
+                                         try-complete-file-name
+                                         try-expand-all-abbrevs
+                                         try-expand-list
+                                         try-expand-line
+                                         try-complete-lisp-symbol-partially
+                                         try-complete-lisp-symbol))
+
 ;; store all backup and autosave files in the tmp dir
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
@@ -31,8 +45,6 @@
 ;;smex makes M-x soooooo much better
 (setq smex-save-file (expand-file-name ".smex-items" my-emacs-app-data-dir))
 (smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
 ;; projectile is a project management mode
 (require 'projectile)
@@ -43,6 +55,11 @@
 (frame-restore-mode)
 
 ;;(desktop-save-mode 1)
+
+(require 'whitespace)
+(global-whitespace-mode t)
+(setq whitespace-global-modes '(c-mode java-mode))
+(setq whitespace-style '(face trailing tabs newline tab-mark))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;;(add-hook 'c-mode-hook (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))

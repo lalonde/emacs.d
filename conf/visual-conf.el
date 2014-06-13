@@ -24,6 +24,7 @@
 
 (setq indent-tabs-mode nil)
 (show-paren-mode t)
+(electric-pair-mode t)
 (setq nxml-child-indent 4)
 
 (setq-default indent-tabs-mode nil)   ;; don't use tabs to indent

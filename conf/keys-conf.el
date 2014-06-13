@@ -1,6 +1,10 @@
 ;; use hippie-expand instead of dabbrev
 (global-set-key (kbd "M-/") 'hippie-expand)
 
+;; smex
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+
 ;;Buffer navigation
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
