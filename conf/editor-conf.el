@@ -7,6 +7,10 @@
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
+;;Make dired happy with my system
+(when (eq system-type 'darwin)
+  (require 'ls-lisp)
+  (setq ls-lisp-use-insert-directory-program nil))
 (put 'dired-find-alternate-file 'disabled nil)
 
 (require 'flyspell)
