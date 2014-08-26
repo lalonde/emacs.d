@@ -67,3 +67,8 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;;(add-hook 'c-mode-hook (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+
+;; Better java indentation
+(defun my-indent-setup ()
+  (c-set-offset 'arglist-intro '+))
+(add-hook 'java-mode-hook 'my-indent-setup)
