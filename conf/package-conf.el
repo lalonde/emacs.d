@@ -13,7 +13,6 @@
                        diminish
                        exec-path-from-shell
                        erlang
-                       frame-restore
                        rainbow-mode
                        go-mode
                        projectile

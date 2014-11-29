@@ -33,6 +33,8 @@
 ;; delete the selection with a keypress
 ;; (delete-selection-mode t)
 
+;;Fonts
+(set-default-font "Inconsolata-18")
 
 ;; meaningful names for buffers with the same name
 (require 'uniquify)

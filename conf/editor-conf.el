@@ -15,6 +15,7 @@
 
 (require 'flyspell)
 (setq ispell-program-name "aspell" ; use aspell instead of ispell
+      ispell-list-command "--list"
       ispell-extra-args '("--sug-mode=ultra"))
 (flyspell-mode t)
 
@@ -56,9 +57,9 @@
 (projectile-global-mode t)
 (diminish 'projectile-mode "Prjl")
 
-(frame-restore-mode)
-
-;;(desktop-save-mode 1)
+(desktop-save-mode 0)
+;;(setq desktop-restore-eager 5)
+;;(setq desktop-clear-preserve-buffers-regexp (append '("^regex! use it!") desktop-clear-preserve-buffers-regexp)
 
 (require 'whitespace)
 (global-whitespace-mode t)
