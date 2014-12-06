@@ -4,6 +4,8 @@
 
 (exec-path-from-shell-copy-env "GOPATH")
 (exec-path-from-shell-copy-env "JAVA_HOME")
+(exec-path-from-shell-copy-env "GROOVY_HOME")
+
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
@@ -26,6 +28,7 @@
       ido-save-directory-list-file (expand-file-name "ido.hist" my-emacs-app-data-dir)
       ido-default-file-method 'selected-window
       ido-auto-merge-work-directories-length -1)
+
 (ido-mode t)
 
 ;; taken from prelude.  i like this order
@@ -52,10 +55,11 @@
 (smex-initialize)
 
 ;; projectile is a project management mode
-(require 'projectile)
 (setq projectile-cache-file (expand-file-name  "projectile.cache" my-emacs-app-data-dir))
-(projectile-global-mode t)
+
+(projectile-global-mode t) 
 (diminish 'projectile-mode "Prjl")
+
 
 (desktop-save-mode 0)
 ;;(setq desktop-restore-eager 5)
@@ -68,8 +72,3 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;;(add-hook 'c-mode-hook (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
-
-;; Better java indentation
-(defun my-indent-setup ()
-  (c-set-offset 'arglist-intro '+))
-(add-hook 'java-mode-hook 'my-indent-setup)

@@ -1,5 +1,5 @@
 ;;; VERSION and BOOTSTRAP
-(when (version< emacs-version "24.3") (error "Lets run something greater than 24.2"))
+(when (version< emacs-version "24.4") (error "Lets run something greater than 24.3"))
 
 ;;; define directories and a little helper function
 (defconst my-emacs-base-dir (file-name-directory load-file-name)
@@ -22,12 +22,14 @@
 
 (add-to-list 'load-path my-emacs-vendor-dir)
 
+
+
 (load-conf "cedet-conf")
 (load-conf "package-conf")
 (load-conf "editor-conf")
+(load-conf "lang-conf")
 (load-conf "visual-conf")
 (load-conf "yasnippet-conf")
-
 (load-conf "sqlplus-conf")
 (load-conf "tabbar-conf")
 (load-conf "keys-conf")

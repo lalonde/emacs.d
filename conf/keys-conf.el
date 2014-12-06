@@ -12,3 +12,9 @@
 (global-set-key (kbd "s-p") 'projectile-switch-project)
 (global-set-key (kbd "s-f") 'projectile-find-file)
 (global-set-key (kbd "s-g") 'projectile-grep)
+
+;;inf-groovy
+(add-hook 'groovy-mode-hook
+          '(lambda ()
+             (inf-groovy-keys)
+             ))
