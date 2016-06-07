@@ -18,3 +18,6 @@
           '(lambda ()
              (inf-groovy-keys)
              ))
+
+;;go auto-complete
+(global-set-key (kbd "C-c C-/") 'go-autocomplete)
