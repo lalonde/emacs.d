@@ -12,5 +12,6 @@
 (ac-config-default)
 (defun my-go-mode-hook ()
   (add-hook 'before-save-hook #'gofmt-before-save)
-  )
+  (flyspell-prog-mode)
+  (ac-flyspell-workaround))
 (add-hook 'go-mode-hook 'my-go-mode-hook)

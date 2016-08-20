@@ -6,7 +6,13 @@
 
 (setq column-number-mode t)
 
-(setq visible-bell t)
+;;; Blink mode line
+(setq visible-bell nil)
+nil
+(setq ring-bell-function (lambda ()
+                           (invert-face 'mode-line)
+                           (run-with-timer 0.1 nil 'invert-face 'mode-line)))
+(lambda nil (invert-face (quote mode-line)) (run-with-timer 0.1 nil (quote invert-face) (quote mode-line)))
 
 ;; nice scrolling
 (setq scroll-margin 0
