@@ -13,5 +13,9 @@
 (defun my-go-mode-hook ()
   (add-hook 'before-save-hook #'gofmt-before-save)
   (flyspell-prog-mode)
-  (ac-flyspell-workaround))
+  (ac-flyspell-workaround)
+  (go-eldoc-setup))
 (add-hook 'go-mode-hook 'my-go-mode-hook)
+(set-face-attribute 'eldoc-highlight-function-argument nil
+                    :underline f :foreground "green"
+                    :weight 'bold)

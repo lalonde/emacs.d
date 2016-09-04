@@ -5,6 +5,9 @@
 (add-to-list 'package-archives
              '("marmalade" .
                "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" .
+               "https://melpa.org/packages/"))
 
 (package-initialize)
 
@@ -18,6 +21,7 @@
                        erlang
                        rainbow-mode
                        go-mode
+                       go-eldoc
                        groovy-mode
                        projectile
                        protobuf-mode
