@@ -2,9 +2,10 @@
 
 (require 'package)
 
-(add-to-list 'package-archives
-             '("marmalade" .
-               "http://marmalade-repo.org/packages/"))
+;; Get melpas cert authenticated
+(require 'gnutls)
+(add-to-list 'gnutls-trustfiles "/usr/local/etc/openssl/cert.pem")
+
 (add-to-list 'package-archives
              '("melpa" .
                "https://melpa.org/packages/"))
@@ -16,15 +17,18 @@
                        cider
                        clojure-mode
                        clojure-test-mode
+                       company
+                       company-go
                        diminish
                        exec-path-from-shell
                        erlang
+                       flycheck-gometalinter
                        rainbow-mode
                        go-mode
                        go-eldoc
                        groovy-mode
                        projectile
-                       protobuf-mode
+                       rainbow-delimiters
                        smartparens
                        smex
                        tabbar

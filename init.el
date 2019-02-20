@@ -27,11 +27,20 @@
 ;;; start loading customizations
 (setq custom-file (expand-file-name "custom.el" my-emacs-personal-dir))
 
-(add-to-list 'load-path my-emacs-vendor-dir)
+
+(let ((base my-emacs-vendor-dir))
+  (add-to-list 'load-path base)
+  (dolist (f (directory-files base))
+    (let ((name (concat base "/" f)))
+      (when (and (file-directory-p name)
+                 (not (equal f ".."))
+                 (not (equal f ".")))
+        (add-to-list 'load-path name)))))
+;;(add-to-list 'load-path my-emacs-vendor-dir)
 
 
 
-(load-conf "cedet-conf")
+;(load-conf "cedet-conf")
 (load-conf "package-conf")
 (load-conf "editor-conf")
 (load-conf "lang-conf")

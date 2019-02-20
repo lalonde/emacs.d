@@ -57,7 +57,7 @@
 ;; projectile is a project management mode
 (setq projectile-cache-file (expand-file-name  "projectile.cache" my-emacs-app-data-dir))
 
-(projectile-global-mode t) 
+(projectile-global-mode t)
 (diminish 'projectile-mode "Prjl")
 
 
@@ -72,3 +72,20 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;;(add-hook 'c-mode-hook (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+
+;; set default `company-backends'
+(setq company-backends
+      '((company-files          ; files & directory
+         company-keywords       ; keywords
+         company-capf
+         company-yasnippet
+         )
+        (company-abbrev company-dabbrev)
+        ))
+(require 'company)
+(setq company-tooltip-limit 20)                      ; bigger popup window
+(setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
+(setq company-echo-delay 0)                          ; remove annoying blinking
+
+;; Fix emacs 25
+(define-key global-map "\M-*" 'pop-tag-mark)

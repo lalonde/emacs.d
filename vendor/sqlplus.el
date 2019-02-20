@@ -5,7 +5,7 @@
 ;; Author: Peter Karpiuk <piotr.karpiuk (at) gmail (dot) com>
 ;; Maintainer: Peter Karpiuk <piotr.karpiuk (at) gmail (dot) com>
 ;; Created: 25 Nov 2007
-;; Version 0.9.0
+;; Version 0.9.1
 ;; Keywords: sql sqlplus oracle plsql
 
 ;; GNU Emacs is free software; you can redistribute it and/or modify
@@ -232,12 +232,6 @@ Session file name has format '<connect-string>.sqp'"
   :tag "SQL*Plus History Dir"
   :type '(choice directory (const nil)))
 
-(defcustom sqlplus-save-passwords nil
-  "Non-nil means save passwords between Emacs sessions. (Not implemented yet)."
-  :group 'sqlplus
-  :tag "SQL*Plus Save Passwords"
-  :type '(boolean))
-
 (defcustom sqlplus-pagesize 200
   "Approximate number of records in query results.
 If result has more rows, it will be cutted and terminated with '. . .' line."
@@ -407,7 +401,7 @@ Mode Specific Bindings:
   (unless (assq 'orcl-mode minor-mode-map-alist)
     (push (cons 'orcl-mode orcl-mode-map) minor-mode-map-alist)))
 
-(defvar sqlplus-user-variables (makehash 'equal))
+(defvar sqlplus-user-variables (make-hash-table :test 'equal))
 
 (defvar sqlplus-user-variables-history nil)
 
@@ -2652,6 +2646,7 @@ Returns (qualified-connect-string refined-connect-string)."
         (setq cs (concat cs "/" password))))
     (list cs refined-cs)))
 
+;;;###autoload
 (defun sqlplus (connect-string &optional input-buffer-name output-buffer-flag)
   "Create SQL*Plus process connected to Oracle according to
 CONNECT-STRING, open (or create) input buffer with specified
@@ -2852,6 +2847,7 @@ create output buffer but dont show it, DONT-CREATE-OUTPUT-BUFFER
 	      (buffer-list))
     (sqlplus-shutdown connect-string)))
 
+;;;###autoload
 (defun sqlplus-shutdown (connect-string &optional dont-kill-input-buffer)
   "Kill input, output and process buffer for specified CONNECT-STRING."
   (let ((input-buffers (delq nil (mapcar (lambda (buffer) (with-current-buffer buffer
@@ -3142,7 +3138,7 @@ create output buffer but dont show it, DONT-CREATE-OUTPUT-BUFFER
         (set-marker chunk-end-pos nil)
         (set-marker prompt-found nil)))))
 
-(defadvice switch-to-buffer (around switch-to-buffer-around-advice (buffer-or-name &optional norecord))
+(defadvice switch-to-buffer (around switch-to-buffer-around-advice (buffer-or-name &optional norecord force-same-window))
   ad-do-it
   (when (and sqlplus-connect-string
 	     (eq major-mode 'sqlplus-mode))
@@ -4335,20 +4331,6 @@ buffer."
 (setq recentf-exclude (cons (concat "^" (regexp-quote (file-name-as-directory temporary-file-directory)))
 			    (when (boundp 'recentf-exclude)
 			      recentf-exclude)))
-
-(when (fboundp 'ide-register-persistent-var)
-  (funcall (symbol-function 'ide-register-persistent-var) 'sqlplus-connect-strings-alist
-			       ;; save proc
-			       (lambda (alist)
-				 (mapcar (lambda (pair)
-					   (if sqlplus-save-passwords
-					       pair
-					     (cons (car pair) nil)))
-					 alist))
-			       ;; load proc
-			       (lambda (alist)
-				 (setq sqlplus-connect-string-history (mapcar (lambda (pair) (car pair)) alist))
-				 alist)))
 
 (defun get-all-dirs (root-dir)
   (let ((list-to-see (list root-dir))

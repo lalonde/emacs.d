@@ -8,7 +8,7 @@
 
 ;;; Blink mode line
 (setq visible-bell nil)
-nil
+;; Why was this here? nil
 (setq ring-bell-function (lambda ()
                            (invert-face 'mode-line)
                            (run-with-timer 0.1 nil 'invert-face 'mode-line)))
@@ -24,9 +24,9 @@ nil
 (column-number-mode t)
 (size-indication-mode t)
 
-(setq-default cursor-type 'bar)
+(setq-default cursor-type '(hbar . 5))
 (tool-bar-mode 0)
-(blink-cursor-mode -1)
+(blink-cursor-mode 1)
 
 (setq indent-tabs-mode nil)
 (show-paren-mode t)
@@ -56,6 +56,9 @@ nil
 (global-undo-tree-mode)
 (diminish 'undo-tree-mode)
 
+(require 'rainbow-delimiters)
+;; (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
 (require 'smartparens-config)
 (setq sp-base-key-bindings 'paredit)
 (setq sp-autoskip-closing-pair 'always)
@@ -71,4 +74,7 @@ nil
 (volatile-highlights-mode t)
 (diminish 'volatile-highlights-mode)
 
-(load-theme 'ample-zen t)
+(load-theme 'adwaita t)
+
+(require 'nyan-mode)
+(nyan-mode)
