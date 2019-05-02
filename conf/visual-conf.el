@@ -24,7 +24,7 @@
 (column-number-mode t)
 (size-indication-mode t)
 
-(setq-default cursor-type '(hbar . 5))
+(setq-default cursor-type '(hbar . 10))
 (tool-bar-mode 0)
 (blink-cursor-mode 1)
 

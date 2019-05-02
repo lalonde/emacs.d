@@ -15,6 +15,7 @@
 (defvar my-packages  '(ample-zen-theme
                        auto-complete
                        cider
+                       clang-format
                        clojure-mode
                        clojure-test-mode
                        company
@@ -22,7 +23,7 @@
                        diminish
                        exec-path-from-shell
                        erlang
-                       flycheck-gometalinter
+                       flycheck-golangci-lint
                        rainbow-mode
                        go-mode
                        go-eldoc

@@ -1,4 +1,5 @@
-;;C/C++
+;
+;C/C++
 (require 'ggtags)
 (add-hook 'c-mode-common-hook
           (lambda ()
@@ -29,23 +30,14 @@
 ;; (require 'go-autocomplete)
 ;; (require 'auto-complete-config)
 (require 'go-eldoc)
-;; (ac-config-default)
-;;gometalinter
-;; skips 'vendor' directories and sets GO15VENDOREXPERIMENT=1
-(setq flycheck-gometalinter-vendor t)
-;; only show errors
-(setq flycheck-gometalinter-errors-only t)
-;; only run fast linters
-(setq flycheck-gometalinter-fast t)
-;; use in tests files
-(setq flycheck-gometalinter-test t)
-;; disable linters
-(setq flycheck-gometalinter-disable-linters '("gotype" "gocyclo"))
-;; Only enable selected linters
-(setq flycheck-gometalinter-disable-all t)
-(setq flycheck-gometalinter-enable-linters '("golint"))
-;; Set different deadline (default: 5s)
-(setq flycheck-gometalinter-deadline "10s")
+;; golangci-lint
+;;(setq flycheck-golangci-lint-config "path/to/config")
+;;(setq flycheck-golangci-lint-deadline "1m")
+(setq flycheck-golangci-lint-tests t)
+(setq flycheck-golangci-lint-fast t)
+;;(setenv "GO111MODULE" "on")
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
 
 (defun my-go-mode-hook ()
   (set (make-local-variable 'company-backends) '(company-go))
@@ -58,6 +50,14 @@
 (set-face-attribute 'eldoc-highlight-function-argument nil
                     :underline nil :foreground "green"
                     :weight 'bold)
+;; Keep go.mod file from entering modula-2 mode
+(add-to-list 'auto-mode-alist '("go\\.mod\\'" . text-mode))
 
 ;; protobuf
 (require 'protobuf-mode)
+(autoload 'protobuf-mode "protobuf-mode" "" t nil)
+(add-to-list 'auto-mode-alist (cons "\\.proto\\'" 'protobuf-mode))
+;; (add-hook 'protobuf-mode-hook
+;;           (function (lambda ()
+;;                     (add-hook 'before-save-hook
+;;                               'clang-format-buffer))))
