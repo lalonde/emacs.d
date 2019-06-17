@@ -3,6 +3,7 @@
 (windmove-default-keybindings)
 
 (exec-path-from-shell-copy-env "GOPATH")
+(exec-path-from-shell-copy-env "GO111MODULE")
 (exec-path-from-shell-copy-env "JAVA_HOME")
 (exec-path-from-shell-copy-env "GROOVY_HOME")
 
@@ -15,11 +16,13 @@
   (setq ls-lisp-use-insert-directory-program nil))
 (put 'dired-find-alternate-file 'disabled nil)
 
-(require 'flyspell)
-(setq ispell-program-name "aspell" ; use aspell instead of ispell
-      ispell-list-command "--list"
-      ispell-extra-args '("--sug-mode=ultra"))
-(flyspell-mode t)
+(use-package flyspell
+	     :init
+	       (flyspell-mode t)
+	     :config
+	       (setq ispell-program-name "aspell"
+		     ispell-list-command "--list"
+		     ispell-extra-args '("--sug-mode=ultra")))
 
 (setq ido-enable-prefix nil
       ido-create-new-buffer 'always
@@ -65,27 +68,34 @@
 ;;(setq desktop-restore-eager 5)
 ;;(setq desktop-clear-preserve-buffers-regexp (append '("^regex! use it!") desktop-clear-preserve-buffers-regexp)
 
-(require 'whitespace)
-(global-whitespace-mode t)
-(setq whitespace-global-modes '(c-mode java-mode))
-(setq whitespace-style '(face trailing tabs newline tab-mark))
+(use-package whitespace
+	     :ensure t
+	     :defer t
+	     :init (global-whitespace-mode t)
+	     :config
+	       (setq whitespace-global-modes '(c-mode java-mode)
+		     whitespace-style '(face trailing tabs newline tab-mark))
+	     :hook
+	       (before-save . delete-trailing-whitespace))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-;;(add-hook 'c-mode-hook (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
 
-;; set default `company-backends'
-(setq company-backends
-      '((company-files          ; files & directory
-         company-keywords       ; keywords
-         company-capf
-         company-yasnippet
-         )
-        (company-abbrev company-dabbrev)
-        ))
-(require 'company)
-(setq company-tooltip-limit 20)                      ; bigger popup window
-(setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
-(setq company-echo-delay 0)                          ; remove annoying blinking
+(use-package company
+  :bind ("C-c C-c" . company-complete)
+  :commands company-mode
+  :ensure t
+  :init
+  (setq company-backends
+        '((company-files          ; files & directory
+           company-keywords       ; keywords
+           company-capf
+           company-yasnippet)
+          (company-abbrev company-dabbrev))
+
+        company-tooltip-limit 20  ; bigger popup window
+        company-idle-delay nil     ; decrease delay before autocompletion popup shows
+        company-echo-delay 0)      ; remove annoying blinking
+  :diminish company-mode
+  :hook (go-mode . company-mode))
 
 ;; Fix emacs 25
 (define-key global-map "\M-*" 'pop-tag-mark)

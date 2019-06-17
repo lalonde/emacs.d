@@ -26,38 +26,46 @@
 ;(add-hook 'java-mode-hook 'my-indent-setup)
 
 ;;Go
-(require 'company-go)
-;; (require 'go-autocomplete)
-;; (require 'auto-complete-config)
-(require 'go-eldoc)
+(use-package go-mode
+	     :defer f
+	     :ensure t
+	     :config
+	       (defun my-go-mode-hook ()
+		 (set (make-local-variable 'company-backends) '(company-go))
+		 (add-hook 'before-save-hook 'gofmt-before-save nil 'local)
+		 (flyspell-prog-mode))
+	     :hook (go-mode . my-go-mode-hook))
+	       
+(use-package company-go
+	     :defer t
+	     :ensure t)
+
+(use-package go-eldoc
+	     :ensure t
+	     :defer t
+	     :config
+	       (set-face-attribute 'eldoc-highlight-function-argument nil
+				   :underline nil :foreground "green" :weight 'bold)
+	     :hook (go-mode . go-eldoc-setup))
+
 ;; golangci-lint
 ;;(setq flycheck-golangci-lint-config "path/to/config")
 ;;(setq flycheck-golangci-lint-deadline "1m")
 (setq flycheck-golangci-lint-tests t)
 (setq flycheck-golangci-lint-fast t)
 ;;(setenv "GO111MODULE" "on")
+
 (eval-after-load 'flycheck
   '(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
 
-(defun my-go-mode-hook ()
-  (set (make-local-variable 'company-backends) '(company-go))
-  (company-mode)
-  (add-hook 'before-save-hook #'gofmt-before-save)
-  (flyspell-prog-mode)
-;;  (ac-flyspell-workaround)
-  (go-eldoc-setup))
-(add-hook 'go-mode-hook 'my-go-mode-hook)
-(set-face-attribute 'eldoc-highlight-function-argument nil
-                    :underline nil :foreground "green"
-                    :weight 'bold)
 ;; Keep go.mod file from entering modula-2 mode
 (add-to-list 'auto-mode-alist '("go\\.mod\\'" . text-mode))
 
 ;; protobuf
-(require 'protobuf-mode)
-(autoload 'protobuf-mode "protobuf-mode" "" t nil)
-(add-to-list 'auto-mode-alist (cons "\\.proto\\'" 'protobuf-mode))
-;; (add-hook 'protobuf-mode-hook
-;;           (function (lambda ()
-;;                     (add-hook 'before-save-hook
-;;                               'clang-format-buffer))))
+(use-package protobuf-mode
+	     :ensure t
+	     :config
+	       (defun my-proto-mode-hook ()
+		 (add-hook 'before-save-hook 'clang-format-buffer nil 'local))
+	     :mode ("\\.proto\\'" . protobuf-mode)
+	     :hook (protobuf-mode . my-proto-mode-hook))
