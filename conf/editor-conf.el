@@ -2,18 +2,17 @@
 
 (windmove-default-keybindings)
 
-(exec-path-from-shell-copy-env "GOPATH")
-(exec-path-from-shell-copy-env "GO111MODULE")
-(exec-path-from-shell-copy-env "JAVA_HOME")
-(exec-path-from-shell-copy-env "GROOVY_HOME")
 
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
+(when (memq window-system '(mac ns x))
+  (use-package exec-path-from-shell)
+  (setenv "SHELL" "/bin/zsh")
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH"))
 
 ;;Make dired happy with my system
-(when (eq system-type 'darwin)
-  (require 'ls-lisp)
-  (setq ls-lisp-use-insert-directory-program nil))
+;;(when (eq system-type 'darwin)
+;;  (use-package ls-lisp)
+;;  (setq ls-lisp-use-insert-directory-program nil))
 (put 'dired-find-alternate-file 'disabled nil)
 
 (use-package flyspell
@@ -54,14 +53,16 @@
       `((".*" ,temporary-file-directory t)))
 
 ;;smex makes M-x soooooo much better
-(setq smex-save-file (expand-file-name ".smex-items" my-emacs-app-data-dir))
-(smex-initialize)
+(use-package smex
+  :init (smex-initialize)
+  :config (setq smex-save-file (expand-file-name ".smex-items" my-emacs-app-data-dir)))
 
 ;; projectile is a project management mode
 (setq projectile-cache-file (expand-file-name  "projectile.cache" my-emacs-app-data-dir))
 
-(projectile-global-mode t)
-(diminish 'projectile-mode "Prjl")
+(use-package projectile
+  :init (projectile-global-mode t)
+  :diminish "Prjl")
 
 
 (desktop-save-mode 0)

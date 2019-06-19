@@ -16,8 +16,9 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
-(require 'bind-key)
+(setq use-package-always-ensure t)
+(use-package diminish)
+(use-package bind-key)
 
 ;;(package-initialize)
 ;;

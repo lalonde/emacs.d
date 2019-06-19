@@ -42,39 +42,36 @@
 ;;Fonts
 (set-default-font "Inconsolata-18")
 
-;; meaningful names for buffers with the same name
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-(setq uniquify-separator "/")
-(setq uniquify-after-kill-buffer-p t)    ; rename after killing uniquified
-(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
-
 ;; highlight the current line
 (global-hl-line-mode +1)
 
 ;; sensible undo
-(global-undo-tree-mode)
-(diminish 'undo-tree-mode)
+(use-package undo-tree
+  :config (global-undo-tree-mode)
+  :diminish 'undo-tree-mode)
 
-(require 'rainbow-delimiters)
+(use-package rainbow-delimiters)
 ;; (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-(require 'smartparens-config)
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(sp-use-paredit-bindings)
-
-(show-smartparens-global-mode +1)
+(use-package smartparens
+  :config
+  (progn
+    (setq sp-base-key-bindings 'paredit)
+    (setq sp-autoskip-closing-pair 'always)
+    (setq sp-hybrid-kill-entire-symbol nil)
+    (sp-use-paredit-bindings)
+    (show-smartparens-global-mode +1)))
 
 ;; disable annoying blink-matching-paren
 (setq blink-matching-paren nil)
 
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
-(diminish 'volatile-highlights-mode)
+(use-package volatile-highlights
+  :config
+  (progn
+    (volatile-highlights-mode t)
+    (diminish 'volatile-highlights-mode)))
 
 (load-theme 'adwaita t)
 
-(require 'nyan-mode)
+(use-package nyan-mode)
 (nyan-mode)

@@ -1,6 +1,6 @@
 ;
 ;C/C++
-(require 'ggtags)
+(use-package ggtags)
 (add-hook 'c-mode-common-hook
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
@@ -16,14 +16,6 @@
 (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
 
 (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
-
-;;Groovy
-;(require 'inf-groovy)
-
-;; Better java indentation
-;(defun my-indent-setup ()
-;  (c-set-offset 'arglist-intro '+))
-;(add-hook 'java-mode-hook 'my-indent-setup)
 
 ;;Go
 (use-package go-mode

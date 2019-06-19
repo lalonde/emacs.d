@@ -46,7 +46,7 @@
 (load-conf "lang-conf")
 (load-conf "visual-conf")
 (load-conf "yasnippet-conf")
-(load-conf "sqlplus-conf")
+;(load-conf "sqlplus-conf")
 (load-conf "tabbar-conf")
 (load-conf "keys-conf")
 

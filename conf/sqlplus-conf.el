@@ -1,7 +1,7 @@
 ;;;;;; SQLPLUS
-(require 'sqlplus)
+(use-package sqlplus)
 (add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
-(require 'plsql)
+(use-package plsql)
 (setq auto-mode-alist
       (append '(("\\.pls\\'" . plsql-mode) ("\\.pkg\\'" . plsql-mode)
                 ("\\.pks\\'" . plsql-mode) ("\\.pkb\\'" . plsql-mode)

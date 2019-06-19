@@ -1,4 +1,4 @@
-(require 'yasnippet)
+(use-package yasnippet)
 
 (add-to-list 'yas/snippet-dirs (concat my-emacs-personal-dir "/snippets/"))
 (yas/global-mode 1)
