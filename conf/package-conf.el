@@ -4,6 +4,7 @@
 (setq package-enable-at-startup nil)
 
 ;; Get melpas cert authenticated
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require 'gnutls)
 (add-to-list 'gnutls-trustfiles "/usr/local/etc/openssl/cert.pem")
 

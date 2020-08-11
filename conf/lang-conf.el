@@ -1,5 +1,40 @@
-;
-;C/C++
+;; LSP
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook ((go-mode . lsp-deferred) (python-mode . lsp-deferred)))
+
+;; Optional - provides fancier overlays.
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+;; Company mode is a standard completion package that works well with lsp-mode.
+(use-package company
+  :ensure t
+  :config
+  ;; Optionally enable completion-as-you-type behavior.
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1))
+
+;; Optional - provides snippet support.
+(use-package yasnippet
+  :ensure t
+  :commands yas-minor-mode
+  :hook (go-mode . yas-minor-mode))
+
+(setq lsp-gopls-staticcheck t)
+(setq lsp-eldoc-render-all t)
+(setq lsp-gopls-complete-unimported t)
+
+(setq lsp-ui-doc-enable nil
+      lsp-ui-peek-enable t
+      lsp-ui-sideline-enable t
+      lsp-ui-imenu-enable t
+      lsp-ui-flycheck-enable t)
+
+;;
+;;C/C++
 (use-package ggtags)
 (add-hook 'c-mode-common-hook
           (lambda ()
@@ -18,27 +53,35 @@
 (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
 
 ;;Go
-(use-package go-mode
-	     :defer f
-	     :ensure t
-	     :config
-	       (defun my-go-mode-hook ()
-		 (set (make-local-variable 'company-backends) '(company-go))
-		 (add-hook 'before-save-hook 'gofmt-before-save nil 'local)
-		 (flyspell-prog-mode))
-	     :hook (go-mode . my-go-mode-hook))
-	       
-(use-package company-go
-	     :defer t
-	     :ensure t)
 
-(use-package go-eldoc
-	     :ensure t
-	     :defer t
-	     :config
-	       (set-face-attribute 'eldoc-highlight-function-argument nil
-				   :underline nil :foreground "green" :weight 'bold)
-	     :hook (go-mode . go-eldoc-setup))
+;; Set up before-save hooks to format buffer and add/delete imports.
+;; Make sure you don't have other gofmt/goimports hooks enabled.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;; (use-package go-mode
+;; 	     :defer f
+;; 	     :ensure t
+;; 	     :config
+;; 	       (defun my-go-mode-hook ()
+;; 		 (set (make-local-variable 'company-backends) '(company-go))
+;; 		 (add-hook 'before-save-hook 'gofmt-before-save nil 'local)
+;; 		 (flyspell-prog-mode))
+;; 	     :hook (go-mode . my-go-mode-hook))
+;;
+;; (use-package company-go
+;; 	     :defer t
+;; 	     :ensure t)
+
+;; (use-package go-eldoc
+;; 	     :ensure t
+;; 	     :defer t
+;; 	     :config
+;; 	       (set-face-attribute 'eldoc-highlight-function-argument nil
+;; 				   :underline nil :foreground "green" :weight 'bold)
+;; 	     :hook (go-mode . go-eldoc-setup))
 
 ;; golangci-lint
 ;;(setq flycheck-golangci-lint-config "path/to/config")
@@ -61,3 +104,9 @@
 		 (add-hook 'before-save-hook 'clang-format-buffer nil 'local))
 	     :mode ("\\.proto\\'" . protobuf-mode)
 	     :hook (protobuf-mode . my-proto-mode-hook))
+
+;; Python
+(setq python-shell-interpreter "python3")
+
+;; YAML
+(use-package yaml-mode)

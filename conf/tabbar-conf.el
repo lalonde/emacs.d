@@ -10,6 +10,8 @@
     )
   :config
   (progn
+    ;; (tabbar-ruler-group-buffer-groups)
+    (tabbar-ruler-group-by-projectile-project)
     (global-set-key [M-s-left] 'tabbar-backward)
     (global-set-key [M-s-right] 'tabbar-forward)
     (global-set-key [M-s-up] 'tabbar-forward-group)
