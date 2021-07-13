@@ -1,13 +1,30 @@
 ;; LSP
+
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
-  :hook ((go-mode . lsp-deferred) (python-mode . lsp-deferred)))
+  :config (setq lsp-headerline-breadcrumb-enable nil)
+  ;;:hook ((go-mode . lsp-deferred) (python-mode . lsp-deferred))
+  )
 
 ;; Optional - provides fancier overlays.
 (use-package lsp-ui
   :ensure t
-  :commands lsp-ui-mode)
+  :commands lsp-ui-mode
+  :init (setq lsp-ui-doc-enable nil
+              lsp-ui-peek-enable t
+              lsp-ui-sideline-enable t
+              lsp-ui-sideline-show-diagnostics t
+              lsp-ui-imenu-enable t
+              lsp-ui-flycheck-enable t)
+  :custom
+  (lsp-gopls-staticcheck t)
+  (lsp-eldoc-render-all t)
+  (lsp-gopls-complete-unimported t))
+
+
+(use-package flycheck
+  :ensure t)
 
 ;; Company mode is a standard completion package that works well with lsp-mode.
 (use-package company
@@ -22,16 +39,6 @@
   :ensure t
   :commands yas-minor-mode
   :hook (go-mode . yas-minor-mode))
-
-(setq lsp-gopls-staticcheck t)
-(setq lsp-eldoc-render-all t)
-(setq lsp-gopls-complete-unimported t)
-
-(setq lsp-ui-doc-enable nil
-      lsp-ui-peek-enable t
-      lsp-ui-sideline-enable t
-      lsp-ui-imenu-enable t
-      lsp-ui-flycheck-enable t)
 
 ;;
 ;;C/C++
@@ -54,44 +61,44 @@
 
 ;;Go
 
-;; Set up before-save hooks to format buffer and add/delete imports.
-;; Make sure you don't have other gofmt/goimports hooks enabled.
-(defun lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+(use-package go-mode
+  :defer f
+  :ensure t
+  :bind ()
+  :hook ((go-mode . lsp-deferred)
+         (before-save . lsp-format-buffer)
+         (before-save . lsp-organize-imports)))
 
-;; (use-package go-mode
-;; 	     :defer f
-;; 	     :ensure t
-;; 	     :config
-;; 	       (defun my-go-mode-hook ()
-;; 		 (set (make-local-variable 'company-backends) '(company-go))
-;; 		 (add-hook 'before-save-hook 'gofmt-before-save nil 'local)
-;; 		 (flyspell-prog-mode))
-;; 	     :hook (go-mode . my-go-mode-hook))
-;;
-;; (use-package company-go
-;; 	     :defer t
-;; 	     :ensure t)
-
-;; (use-package go-eldoc
-;; 	     :ensure t
-;; 	     :defer t
-;; 	     :config
-;; 	       (set-face-attribute 'eldoc-highlight-function-argument nil
-;; 				   :underline nil :foreground "green" :weight 'bold)
-;; 	     :hook (go-mode . go-eldoc-setup))
+(use-package go-eldoc
+  :ensure t
+  :defer t
+  :config
+  (set-face-attribute 'eldoc-highlight-function-argument nil
+ 		      :underline nil :foreground "green" :weight 'bold)
+  :hook (go-mode . go-eldoc-setup))
 
 ;; golangci-lint
+(use-package flycheck-golangci-lint
+  :if (executable-find "golangci-lint")
+  :after flycheck
+  :defines flycheck-disabled-checkers
+  :hook (go-mode . (lambda ()
+                     "Enable golangci-lint."
+               ;;      (setq flycheck-disabled-checkers '(go-gofmt
+               ;;                                         go-golint
+               ;;                                         go-vet
+               ;;                                         go-build
+               ;;                                         go-test
+               ;;                                         go-errcheck))
+                     (setq flycheck-golangci-lint-tests t)
+                     (setq flycheck-golangci-lint-fast t))))
+
 ;;(setq flycheck-golangci-lint-config "path/to/config")
 ;;(setq flycheck-golangci-lint-deadline "1m")
-(setq flycheck-golangci-lint-tests t)
-(setq flycheck-golangci-lint-fast t)
 ;;(setenv "GO111MODULE" "on")
 
-(eval-after-load 'flycheck
-  '(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
+;; (eval-after-load 'flycheck
+;;   '(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
 
 ;; Keep go.mod file from entering modula-2 mode
 (add-to-list 'auto-mode-alist '("go\\.mod\\'" . text-mode))

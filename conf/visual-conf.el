@@ -39,7 +39,7 @@
 ;; (delete-selection-mode t)
 
 ;;Fonts
-(set-default-font "Inconsolata-18")
+(set-frame-font "Inconsolata-18")
 
 ;; meaningful names for buffers with the same name
 (setq uniquify-buffer-name-style 'forward)
@@ -56,7 +56,7 @@
   :diminish 'undo-tree-mode)
 
 (use-package rainbow-delimiters)
-;; (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+ (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 (use-package smartparens
   :config
@@ -78,5 +78,9 @@
 
 (load-theme 'adwaita t)
 
-(use-package nyan-mode)
-(nyan-mode)
+(use-package nyan-mode
+  :if window-system
+  :ensure t
+  :config
+  (nyan-mode)
+  )
