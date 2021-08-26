@@ -76,7 +76,13 @@
     (volatile-highlights-mode t)
     (diminish 'volatile-highlights-mode)))
 
-(load-theme 'adwaita t)
+;;(load-theme 'adwaita t)
+;;(load-theme 'material t)
+
+(use-package material-theme
+  :ensure t
+  :config
+  (load-theme 'material t))
 
 (use-package nyan-mode
   :if window-system

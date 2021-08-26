@@ -4,24 +4,25 @@
   :ensure t
   :commands (lsp lsp-deferred)
   :config (setq lsp-headerline-breadcrumb-enable nil)
-  ;;:hook ((go-mode . lsp-deferred) (python-mode . lsp-deferred))
-  )
+  :custom
+  (lsp-gopls-staticcheck t)
+  (lsp-eldoc-render-all nil)
+  (lsp-gopls-complete-unimported t)
+  (lsp-signature-doc-lines 0))
 
 ;; Optional - provides fancier overlays.
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode
   :init (setq lsp-ui-doc-enable nil
+              lsp-ui-flycheck-enable t
+              lsp-ui-imenu-enable nil
               lsp-ui-peek-enable t
+              lsp-ui-sideline-delay 0.5
               lsp-ui-sideline-enable t
+              lsp-ui-sideline-show-code-actions nil
               lsp-ui-sideline-show-diagnostics t
-              lsp-ui-imenu-enable t
-              lsp-ui-flycheck-enable t)
-  :custom
-  (lsp-gopls-staticcheck t)
-  (lsp-eldoc-render-all t)
-  (lsp-gopls-complete-unimported t))
-
+              lsp-ui-sideline-show-hover nil))
 
 (use-package flycheck
   :ensure t)
@@ -64,53 +65,22 @@
 (use-package go-mode
   :defer f
   :ensure t
-  :bind ()
+;;  :bind ()
   :hook ((go-mode . lsp-deferred)
          (before-save . lsp-format-buffer)
          (before-save . lsp-organize-imports)))
-
-(use-package go-eldoc
-  :ensure t
-  :defer t
-  :config
-  (set-face-attribute 'eldoc-highlight-function-argument nil
- 		      :underline nil :foreground "green" :weight 'bold)
-  :hook (go-mode . go-eldoc-setup))
-
-;; golangci-lint
-(use-package flycheck-golangci-lint
-  :if (executable-find "golangci-lint")
-  :after flycheck
-  :defines flycheck-disabled-checkers
-  :hook (go-mode . (lambda ()
-                     "Enable golangci-lint."
-               ;;      (setq flycheck-disabled-checkers '(go-gofmt
-               ;;                                         go-golint
-               ;;                                         go-vet
-               ;;                                         go-build
-               ;;                                         go-test
-               ;;                                         go-errcheck))
-                     (setq flycheck-golangci-lint-tests t)
-                     (setq flycheck-golangci-lint-fast t))))
-
-;;(setq flycheck-golangci-lint-config "path/to/config")
-;;(setq flycheck-golangci-lint-deadline "1m")
-;;(setenv "GO111MODULE" "on")
-
-;; (eval-after-load 'flycheck
-;;   '(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
 
 ;; Keep go.mod file from entering modula-2 mode
 (add-to-list 'auto-mode-alist '("go\\.mod\\'" . text-mode))
 
 ;; protobuf
 (use-package protobuf-mode
-	     :ensure t
-	     :config
-	       (defun my-proto-mode-hook ()
-		 (add-hook 'before-save-hook 'clang-format-buffer nil 'local))
-	     :mode ("\\.proto\\'" . protobuf-mode)
-	     :hook (protobuf-mode . my-proto-mode-hook))
+  :ensure t
+  :config
+  (defun my-proto-mode-hook ()
+    (add-hook 'before-save-hook 'clang-format-buffer nil 'local))
+  :mode ("\\.proto\\'" . protobuf-mode)
+  :hook (protobuf-mode . my-proto-mode-hook))
 
 ;; Python
 (setq python-shell-interpreter "python3")
